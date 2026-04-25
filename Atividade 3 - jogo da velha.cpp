@@ -4,17 +4,22 @@
 int led1r = 2;
 bool trava1r = false;
 int led2r = 3;
+bool trava2r = false;
 int led3r = 4;
+bool trava3r = false;
 int led4y = 5;
+bool trava4y = false;
 int led5y = 6;
+bool trava5y = false;
 int led6y = 7;
+bool trava6y = false;
 int led7g = 8;
+bool trava7g = false;
 int led8g = 9;
+bool trava8g = false;
 int led9g = 10;
+bool trava9g = false;
 int btn = 11;
-
-void piscarLed(int pino, int vezes, int duracao);
-void resenhaLed(int min, int max);
 
 void setup()
 {
@@ -28,63 +33,30 @@ void setup()
     pinMode(led7g, OUTPUT);
     pinMode(led8g, OUTPUT);
     pinMode(led9g, OUTPUT);
-    pinMode(btn, INPUT);
+    pinMode(btn, INPUT_PULLUP);
     Serial.begin(9600);
 }
 
 void loop()
 {
     // checa se o botao ta pressionado
-    bool press = (digitalRead(btn) == HIGH);
+    bool press = (digitalRead(btn) == LOW);
 
     // recebe o valor do potenciometro
     int potenciometro = analogRead(A0);
 
-    resenhaLed(press, potenciometro, -1, 113);
-    // faz cada led piscar de acordo com o potenciometro
-    // if ((potenciometro < 113) and (trava1r == false)) {
-    // piscarLed(led1r, 250);
-    // Serial.println("pisca");
-    //}
-    // if ((potenciometro < 113) and (trava1r == true)) {
-    // digitalWrite(led1r, HIGH);
-    //}
-    // if ((potenciometro < 113) and (press == true)) {
-    // trava1r = true;
-    //}
+    // resenha dos leds
+    resenhaLed(trava1r, led1r, press, potenciometro, 0, 113);
+    resenhaLed(trava2r, led2r, press, potenciometro, 113, 226);
+    resenhaLed(trava3r, led3r, press, potenciometro, 226, 339);
+    resenhaLed(trava4y, led4y, press, potenciometro, 339, 452);
+    resenhaLed(trava5y, led5y, press, potenciometro, 452, 562);
+    resenhaLed(trava6y, led6y, press, potenciometro, 562, 678);
+    resenhaLed(trava7g, led7g, press, potenciometro, 678, 791);
+    resenhaLed(trava8g, led8g, press, potenciometro, 791, 904);
+    resenhaLed(trava9g, led9g, press, potenciometro, 904, 1024);
 
-    if (potenciometro > 113 and potenciometro < 226)
-    {
-        piscarLed(led2r, 250);
-    }
-    if (potenciometro > 226 and potenciometro < 339)
-    {
-        piscarLed(led3r, 250);
-    }
-    if (potenciometro > 339 and potenciometro < 452)
-    {
-        piscarLed(led4y, 250);
-    }
-    if (potenciometro > 452 and potenciometro < 562)
-    {
-        piscarLed(led5y, 250);
-    }
-    if (potenciometro > 562 and potenciometro < 678)
-    {
-        piscarLed(led6y, 250);
-    }
-    if (potenciometro > 678 and potenciometro < 791)
-    {
-        piscarLed(led7g, 250);
-    }
-    if (potenciometro > 791 and potenciometro < 904)
-    {
-        piscarLed(led8g, 250);
-    }
-    if (potenciometro > 904)
-    {
-        piscarLed(led9g, 250);
-    }
+    Serial.println(press);
 }
 
 // Pisca o led selecionado pelo potênciometro
@@ -96,18 +68,22 @@ void piscarLed(int pino, int duracao)
     delay(duracao);
 }
 
-void resenhaLed(bool press, int pot, int min, int max)
+void resenhaLed(bool &trava, int led, bool press, int pot, int min, int max)
 {
-    if ((pot > min) and (pot < max) and (trava1r == false))
+    if ((pot >= min) and (pot < max) and (trava == false))
     {
-        piscarLed(led1r, 250);
+        piscarLed(led, 250);
     }
-    if ((pot > min) and (pot < max) and (trava1r == true))
+    if (trava == true)
     {
-        digitalWrite(led1r, HIGH);
+        digitalWrite(led, HIGH);
     }
-    if ((pot > min) and (pot < max) and (press == true))
+    else
     {
-        trava1r = true;
+        digitalWrite(led, LOW);
+    }
+    if ((pot >= min) and (pot < max) and (press == true))
+    {
+        trava = true;
     }
 }
