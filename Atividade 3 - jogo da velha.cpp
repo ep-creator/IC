@@ -56,7 +56,14 @@ void loop()
     resenhaLed(trava8g, led8g, press, potenciometro, 791, 904);
     resenhaLed(trava9g, led9g, press, potenciometro, 904, 1024);
 
-    Serial.println(press);
+    linha(trava1r, trava2r, trava3r);
+    linha(trava4y, trava5y, trava6y);
+    linha(trava7g, trava8g, trava9g);
+    linha(trava1r, trava4y, trava7g);
+    linha(trava2r, trava5y, trava8g);
+    linha(trava3r, trava6y, trava9g);
+    linha(trava1r, trava5y, trava9g);
+    linha(trava3r, trava5y, trava7g);
 }
 
 // Pisca o led selecionado pelo potênciometro
@@ -85,5 +92,21 @@ void resenhaLed(bool &trava, int led, bool press, int pot, int min, int max)
     if ((pot >= min) and (pot < max) and (press == true))
     {
         trava = true;
+    }
+}
+
+void linha(bool a, bool b, bool c)
+{
+    if (((a and b) and c) == true)
+    {
+        trava1r = false;
+        trava2r = false;
+        trava3r = false;
+        trava4y = false;
+        trava5y = false;
+        trava6y = false;
+        trava7g = false;
+        trava8g = false;
+        trava9g = false;
     }
 }
